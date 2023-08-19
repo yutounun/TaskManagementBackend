@@ -23,6 +23,7 @@ class ProjectCreate(BaseModel):
     total_man_hour_min: int = Field(..., example=60)
     to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
     from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
+    user_key: str = Field(..., example="32ed23f32f2311")
 
 
 class ProjectEdit(BaseModel):
@@ -49,21 +50,21 @@ def get_db(request: Request):
 
 
 # projectの全取得
-@router.get("/projects")
+@router.get("/")
 def get_projects(db: Session = Depends(get_db)):
     projects = db.query(Project).options(joinedload(Project.tasks)).all()
     return projects
 
 
 # 単一のprojectを取得
-@router.get("/projects/{project_id}")
+@router.get("/{project_id}")
 def get_project_by_id(project_id: str, db: Session = Depends(get_db)):
     project = get_project(db, project_id)
     return project
 
 
 # projectを登録
-@router.post("/projects/")
+@router.post("/")
 async def create_project(project_created: ProjectCreate, db: Session = Depends(get_db)):
     now = datetime.now()
 
@@ -73,6 +74,7 @@ async def create_project(project_created: ProjectCreate, db: Session = Depends(g
         total_man_hour_min=project_created.total_man_hour_min,
         to_date=project_created.to_date,
         from_date=project_created.from_date,
+        user_key=project_created.user_key,
     )
     project.id = str(uuid.uuid4())
     project.created_at = now
@@ -85,7 +87,7 @@ async def create_project(project_created: ProjectCreate, db: Session = Depends(g
 
 
 # projectを更新
-@router.put("/projects/{project_id}")
+@router.put("/{project_id}")
 async def update_project(
     project_id: str, project_created: ProjectEdit, db: Session = Depends(get_db)
 ):
@@ -111,7 +113,7 @@ async def update_project(
 
 
 # projectを削除
-@router.delete("/projects/{project_id}")
+@router.delete("/{project_id}")
 async def delete_project(project_id: str, db: Session = Depends(get_db)):
     project = get_project(db, project_id)
 

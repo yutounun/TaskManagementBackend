@@ -39,7 +39,11 @@ class Task(Base):
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=datetime.now(), nullable=False)
     project_key = Column(String(), ForeignKey("Project.id"))
+    user_key = Column(String(), ForeignKey("User.id"))
+
+    # relationship
     project = relationship("Project", back_populates="tasks")
+    user = relationship("User", back_populates="tasks")
 
 
 # Each project can have multiple tasks
@@ -53,7 +57,26 @@ class Project(Base):
     from_date = Column(DateTime, default=datetime.now(), nullable=False)
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=datetime.now(), nullable=False)
+    user_key = Column(String(), ForeignKey("User.id"))
+
+    # relationship
     tasks = relationship("Task", back_populates="project")
+    user = relationship("User", back_populates="projects")
+
+
+# Each user can have multiple tasks and projects
+class User(Base):
+    __tablename__ = "User"
+    id = Column(String(36), primary_key=True)
+    name = Column(String(100))
+    email = Column(String(100))
+    password = Column(String(100))
+    created_at = Column(DateTime, default=datetime.now(), nullable=False)
+    updated_at = Column(DateTime, default=datetime.now(), nullable=False)
+
+    # relationship
+    tasks = relationship("Task", back_populates="user")
+    projects = relationship("Project", back_populates="user")
 
 
 # Remove all tables

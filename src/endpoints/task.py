@@ -24,6 +24,7 @@ class TaskCreate(BaseModel):
     from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
     priority: int = Field(..., example=1)
     project_key: str = Field(..., example="32ed23f32f2311")
+    user_key: str = Field(..., example="32ed23f32f2311")
 
 
 class TaskEdit(BaseModel):
@@ -46,7 +47,7 @@ def get_db(request: Request):
 
 
 # taskの全取得
-@router.get("/tasks")
+@router.get("/")
 def get_tasks(db: Session = Depends(get_db)):
     tasks = db.query(Task).all()
 
@@ -56,14 +57,14 @@ def get_tasks(db: Session = Depends(get_db)):
 
 
 # 単一のtaskを取得
-@router.get("/tasks/{task_id}")
+@router.get("/{task_id}")
 def get_task_by_id(task_id: str, db: Session = Depends(get_db)):
     task = get_task(db, task_id)
     return task
 
 
 # taskを登録
-@router.post("/tasks/")
+@router.post("/")
 async def create_task(task_created: TaskCreate, db: Session = Depends(get_db)):
     now = datetime.now()
 
@@ -75,6 +76,7 @@ async def create_task(task_created: TaskCreate, db: Session = Depends(get_db)):
         from_date=task_created.from_date,
         priority=task_created.priority,
         project_key=task_created.project_key,
+        user_key=task_created.user_key,
     )
     task.id = str(uuid.uuid4())
     task.created_at = now
@@ -87,7 +89,7 @@ async def create_task(task_created: TaskCreate, db: Session = Depends(get_db)):
 
 
 # taskを更新
-@router.put("/tasks/{task_id}")
+@router.put("/{task_id}")
 async def update_task(
     task_id: str, task_created: TaskEdit, db: Session = Depends(get_db)
 ):
@@ -114,7 +116,7 @@ async def update_task(
 
 
 # taskを削除
-@router.delete("/tasks/{task_id}")
+@router.delete("/{task_id}")
 async def delete_task(task_id: str, db: Session = Depends(get_db)):
     task = get_task(db, task_id)
 
