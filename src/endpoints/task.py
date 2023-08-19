@@ -3,8 +3,8 @@ from fastapi import APIRouter
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.requests import Request
-from pydantic import BaseModel
-from db import Task, engine
+from pydantic import BaseModel, Field
+from db import Task
 from datetime import datetime
 
 # APIRouter creates path operations for item module
@@ -17,21 +17,21 @@ router = APIRouter(
 
 # Pydanticを用いたAPIに渡されるデータの定義 ValidationやDocumentationの機能が追加される
 class TaskCreate(BaseModel):
-    title: str
-    status: str
-    man_hour_min: int
-    to_date: datetime
-    from_date: datetime
-    priority: int
+    title: str = Field(..., example="Test Task")
+    status: str = Field(..., example="pending")
+    man_hour_min: int = Field(..., example=60)
+    to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
+    from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
+    priority: int = Field(..., example=1)
 
 
 class TaskEdit(BaseModel):
-    title: str
-    status: str
-    man_hour_min: int
-    to_date: datetime
-    from_date: datetime
-    priority: int
+    title: str = Field(..., example="Test Task")
+    status: str = Field(..., example="pending")
+    man_hour_min: int = Field(..., example=60)
+    to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
+    from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
+    priority: int = Field(..., example=1)
 
 
 # 単一のtaskを取得するためのユーティリティ
@@ -50,14 +50,14 @@ def get_db(request: Request):
 
 # taskの全取得
 @router.get("/tasks")
-def read_tasks(db: Session = Depends(get_db)):
+def get_tasks(db: Session = Depends(get_db)):
     tasks = db.query(Task).all()
     return tasks
 
 
 # 単一のtaskを取得
 @router.get("/tasks/{task_id}")
-def read_task(task_id: str, db: Session = Depends(get_db)):
+def get_task(task_id: str, db: Session = Depends(get_db)):
     task = get_task(db, task_id)
     return task
 
