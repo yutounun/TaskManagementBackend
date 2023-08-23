@@ -68,7 +68,7 @@ class Project(Base):
 class User(Base):
     __tablename__ = "User"
     id = Column(String(36), primary_key=True)
-    name = Column(String(100))
+    username = Column(String(100))
     email = Column(String(100))
     password = Column(String(100))
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
@@ -79,7 +79,7 @@ class User(Base):
     projects = relationship("Project", back_populates="user")
 
 
-# Remove all tables
+# Clear all tables
 # Base.metadata.drop_all(bind=engine)
 
 # Create all tables
