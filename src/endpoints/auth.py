@@ -74,7 +74,9 @@ async def login(
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
 
     # create access token from username and id
-    token = create_access_token(user.username, user.id, timedelta(minutes=20))
+    token = create_access_token(
+        user.username, user.id, user.email, timedelta(minutes=20)
+    )
     return {"access_token": token, "token_type": "bearer"}
 
 
@@ -91,9 +93,11 @@ def authenticate_user(username: str, password: str, db: Session):
     return user
 
 
-def create_access_token(username: str, user_id: str, expires_delta: timedelta):
+def create_access_token(
+    username: str, user_id: str, email: str, expires_delta: timedelta
+):
     expire = datetime.utcnow() + expires_delta
-    encode = {"sub": username, "id": user_id, "exp": expire}
+    encode = {"sub": username, "id": user_id, "email": email, "exp": expire}
     encoded_jwt = jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -106,13 +110,14 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
         user_id: str = payload.get("id")
+        email: str = payload.get("email")
 
         if username is None or user_id is None:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Could not validate credentials",
             )
-        return {"username": username, "id": user_id}
+        return {"username": username, "id": user_id, "email": email}
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -122,14 +127,21 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
 
 # userの全取得
 @router.get("/")
-def get_users(db: Session = Depends(get_db)):
+def get_users(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     users = db.query(User).all()
     return users
 
 
 # 単一のuserを取得
 @router.get("/{user_id}")
-def get_user_by_id(user_id: str, db: Session = Depends(get_db)):
+def get_user_by_id(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     user = get_user(db, user_id)
     return user
 
@@ -157,7 +169,10 @@ async def create_user(user_created: CreateUserRequest, db: Session = Depends(get
 # userを更新
 @router.put("/{user_id}")
 async def update_user(
-    user_id: str, user_created: EditUserRequest, db: Session = Depends(get_db)
+    user_id: str,
+    user_created: EditUserRequest,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     now = datetime.now()
 
@@ -182,7 +197,11 @@ async def update_user(
 
 # userを削除
 @router.delete("/{user_id}")
-async def delete_user(user_id: str, db: Session = Depends(get_db)):
+async def delete_user(
+    user_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     user = get_user(db, user_id)
 
     if not user:

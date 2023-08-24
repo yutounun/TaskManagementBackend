@@ -4,9 +4,11 @@ from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session, sessionmaker
 from starlette.requests import Request
 from pydantic import BaseModel, Field
-from db import Project, Task
+from db import Project, Task, User
 from datetime import datetime
+from src.endpoints.auth import get_current_user
 from sqlalchemy.orm import joinedload
+from typing import Annotated
 
 # APIRouter creates path operations for item module
 router = APIRouter(
@@ -51,21 +53,35 @@ def get_db(request: Request):
 
 # projectの全取得
 @router.get("/")
-def get_projects(db: Session = Depends(get_db)):
+def get_projects(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     projects = db.query(Project).options(joinedload(Project.tasks)).all()
     return projects
 
 
 # 単一のprojectを取得
 @router.get("/{project_id}")
-def get_project_by_id(project_id: str, db: Session = Depends(get_db)):
+def get_project_by_id(
+    project_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     project = get_project(db, project_id)
     return project
 
 
+user_dependency = Annotated[dict, Depends(get_current_user)]
+
+
 # projectを登録
 @router.post("/")
-async def create_project(project_created: ProjectCreate, db: Session = Depends(get_db)):
+async def create_project(
+    project_created: ProjectCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     now = datetime.now()
 
     project = Project(
@@ -89,7 +105,10 @@ async def create_project(project_created: ProjectCreate, db: Session = Depends(g
 # projectを更新
 @router.put("/{project_id}")
 async def update_project(
-    project_id: str, project_created: ProjectEdit, db: Session = Depends(get_db)
+    project_id: str,
+    project_created: ProjectEdit,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     now = datetime.now()
 
@@ -114,7 +133,11 @@ async def update_project(
 
 # projectを削除
 @router.delete("/{project_id}")
-async def delete_project(project_id: str, db: Session = Depends(get_db)):
+async def delete_project(
+    project_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     project = get_project(db, project_id)
 
     if not project:

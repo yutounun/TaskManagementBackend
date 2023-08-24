@@ -6,6 +6,7 @@ from starlette.requests import Request
 from pydantic import BaseModel, Field
 from db import Task
 from datetime import datetime
+from src.endpoints.auth import get_current_user
 
 # APIRouter creates path operations for item module
 router = APIRouter(
@@ -48,7 +49,10 @@ def get_db(request: Request):
 
 # taskの全取得
 @router.get("/")
-def get_tasks(db: Session = Depends(get_db)):
+def get_tasks(
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     tasks = db.query(Task).all()
 
     # project_keyでProjectを検索
@@ -58,14 +62,22 @@ def get_tasks(db: Session = Depends(get_db)):
 
 # 単一のtaskを取得
 @router.get("/{task_id}")
-def get_task_by_id(task_id: str, db: Session = Depends(get_db)):
+def get_task_by_id(
+    task_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     task = get_task(db, task_id)
     return task
 
 
 # taskを登録
 @router.post("/")
-async def create_task(task_created: TaskCreate, db: Session = Depends(get_db)):
+async def create_task(
+    task_created: TaskCreate,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     now = datetime.now()
 
     task = Task(
@@ -91,7 +103,10 @@ async def create_task(task_created: TaskCreate, db: Session = Depends(get_db)):
 # taskを更新
 @router.put("/{task_id}")
 async def update_task(
-    task_id: str, task_created: TaskEdit, db: Session = Depends(get_db)
+    task_id: str,
+    task_created: TaskEdit,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
 ):
     now = datetime.now()
 
@@ -117,7 +132,11 @@ async def update_task(
 
 # taskを削除
 @router.delete("/{task_id}")
-async def delete_task(task_id: str, db: Session = Depends(get_db)):
+async def delete_task(
+    task_id: str,
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user),
+):
     task = get_task(db, task_id)
 
     if not task:
