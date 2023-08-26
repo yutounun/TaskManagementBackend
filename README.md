@@ -1,16 +1,16 @@
-# TaskManagement
+# 🚀TaskManagement App API
 
 Welcome to the TaskManagement repository. This project is designed to manage tasks efficiently using a simple yet powerful tech stack.
-## Swagger
+## 📝Swagger
 Click [here!](https://taskmanagement-y09z.onrender.com/docs#/)
 
-## Tech Stack
+## 🛠Tech Stack
 - **FastAPI**: A modern, fast (high-performance) web framework for building APIs with Python 3.7+ based on standard Python type hints.
 - **Python**: The core programming language used for this project.
 - **Pytest**: A robust testing framework for Python, ensuring the reliability of our code.
 - **SQLite**: A C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
 
-## Getting Started
+## ✈️Getting Started
 
 ### Prerequisites
 Ensure you have Python installed on your machine. This project is developed using Python 3.7+.
