@@ -1,6 +1,5 @@
 from __future__ import annotations
 from sqlalchemy import (
-    Boolean,
     ForeignKey,
     DateTime,
     Column,

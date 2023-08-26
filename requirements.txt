@@ -27,3 +27,4 @@ starlette==0.27.0
 typing_extensions==4.7.1
 uvicorn==0.22.0
 bcrypt==4.0.0
+python-dotenv==1.0.0
