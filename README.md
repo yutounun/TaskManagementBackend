@@ -1,7 +1,3 @@
-Based on the provided information, here's a draft of the README in English for the "TaskManagement" repository:
-
----
-
 # TaskManagement
 
 Welcome to the TaskManagement repository. This project is designed to manage tasks efficiently using a simple yet powerful tech stack.
@@ -31,7 +27,3 @@ To start the application, use the following command:
 uvicorn main:app --reload
 ```
 This will start the FastAPI application with hot-reloading enabled.
-
----
-
-Feel free to make any modifications or additions as needed. Let me know if you'd like any further changes or assistance!
