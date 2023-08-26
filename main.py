@@ -11,7 +11,7 @@ app = FastAPI()
 # DB接続用のセッションクラス インスタンスが作成されると接続する
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-origins = ["http://localhost:8001"]
+origins = ["http://localhost:8000"]
 
 app.add_middleware(
     CORSMiddleware,
