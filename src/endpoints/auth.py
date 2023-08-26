@@ -10,12 +10,12 @@ from typing import Annotated
 from starlette.requests import Request
 from starlette import status
 from pydantic import BaseModel, Field
-from db import User, Task
+from db import User
 from datetime import datetime
-from sqlalchemy.orm import joinedload
 from passlib.context import CryptContext
 from dotenv import load_dotenv
 
+# a library to read .env file
 load_dotenv()
 
 # APIRouter creates path operations for item module
@@ -69,14 +69,17 @@ def get_db(request: Request):
 
 @router.post("/login", response_model=Token)
 async def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    request: Annotated[OAuth2PasswordRequestForm, Depends()],
     db: Session = Depends(get_db),
 ):
     # get current user and make sure entered password
     # and hashed password on DB are matched
-    user = authenticate_user(form_data.username, form_data.password, db)
+    user = authenticate_user(request.username, request.password, db)
     if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED)
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+        )
 
     # create access token from username and id
     token = create_access_token(
@@ -104,6 +107,7 @@ def authenticate_user(username: str, password: str, db: Session):
 def create_access_token(
     username: str, user_id: str, email: str, expires_delta: timedelta
 ):
+    # created token will be expired at current time + specified minutes
     expire = datetime.utcnow() + expires_delta
     encode = {"sub": username, "id": user_id, "email": email, "exp": expire}
     encoded_jwt = jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
@@ -119,6 +123,14 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
         username: str = payload.get("sub")
         user_id: str = payload.get("id")
         email: str = payload.get("email")
+        expire: datetime = payload.get("exp")
+        transformedExpire = datetime.utcfromtimestamp(expire)
+
+        if transformedExpire < datetime.utcnow():
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Token expired",
+            )
 
         if username is None or user_id is None:
             raise HTTPException(

@@ -1,10 +1,11 @@
 import uuid
 from fastapi import APIRouter
-from fastapi import Depends, FastAPI
-from sqlalchemy.orm import Session, sessionmaker
+from fastapi import Depends, HTTPException
+from starlette import status
+from sqlalchemy.orm import Session
 from starlette.requests import Request
 from pydantic import BaseModel, Field
-from db import Project, Task, User
+from db import Project
 from datetime import datetime
 from src.endpoints.auth import get_current_user
 from sqlalchemy.orm import joinedload
@@ -115,7 +116,9 @@ async def update_project(
     project = get_project(db, project_id)
 
     if not project:
-        return {"error": "Project not found"}, 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Project not found"
+        )
 
     project.title = project_created.title
     project.status = project_created.status
@@ -141,7 +144,9 @@ async def delete_project(
     project = get_project(db, project_id)
 
     if not project:
-        return {"error": "Project not found"}, 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Project not found"
+        )
 
     db.delete(project)
     db.commit()

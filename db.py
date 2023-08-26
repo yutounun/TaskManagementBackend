@@ -1,4 +1,5 @@
 from __future__ import annotations
+from datetime import datetime
 from sqlalchemy import (
     ForeignKey,
     DateTime,
@@ -7,13 +8,9 @@ from sqlalchemy import (
     String,
     create_engine,
 )
-from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
-from typing import List
-from sqlalchemy.orm import Mapped, mapped_column
-
-# from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import relationship
+from sqlalchemy.ext.declarative import declarative_base
+
 
 SQLALCHEMY_DATABASE_URI = "sqlite:///./test.db"
 # SQLALCHEMY_DATABASE_URI = "postgresql://user:password@postgresserver/db"
@@ -28,7 +25,7 @@ Base = declarative_base()
 # Each task can be related to only one project
 class Task(Base):
     __tablename__ = "Task"
-    id = Column(String(36), primary_key=True)
+    id = Column(String(36), primary_key=True, index=True)
     title = Column(String(200))
     status = Column(String(10))
     man_hour_min = Column(Integer)
@@ -48,7 +45,7 @@ class Task(Base):
 # Each project can have multiple tasks
 class Project(Base):
     __tablename__ = "Project"
-    id = Column(String(36), primary_key=True)
+    id = Column(String(36), primary_key=True, index=True)
     title = Column(String(200))
     status = Column(String(10))
     total_man_hour_min = Column(Integer)
@@ -66,8 +63,8 @@ class Project(Base):
 # Each user can have multiple tasks and projects
 class User(Base):
     __tablename__ = "User"
-    id = Column(String(36), primary_key=True)
-    username = Column(String(100))
+    id = Column(String(36), primary_key=True, index=True)
+    username = Column(String(100), index=True)
     email = Column(String(100))
     password = Column(String(100))
     created_at = Column(DateTime, default=datetime.now(), nullable=False)

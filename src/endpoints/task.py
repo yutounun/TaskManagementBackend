@@ -1,11 +1,11 @@
 import uuid
-from fastapi import APIRouter
-from fastapi import Depends, FastAPI
-from sqlalchemy.orm import Session, sessionmaker
+from fastapi import Depends, HTTPException, APIRouter
+from sqlalchemy.orm import Session
 from starlette.requests import Request
 from pydantic import BaseModel, Field
 from db import Task
 from datetime import datetime
+from starlette import status
 from src.endpoints.auth import get_current_user
 
 # APIRouter creates path operations for item module
@@ -17,6 +17,7 @@ router = APIRouter(
 
 
 # Pydanticを用いたAPIに渡されるデータの定義 ValidationやDocumentationの機能が追加される
+# Class definition using BaseModel make models on swagger
 class TaskCreate(BaseModel):
     title: str = Field(..., example="Test Task")
     status: str = Field(..., example="pending")
@@ -37,13 +38,15 @@ class TaskEdit(BaseModel):
     priority: int = Field(..., example=1)
 
 
-# 単一のtaskを取得するためのユーティリティ
+# utility func to get task by task_id
 def get_task(db_session: Session, task_id: str):
     return db_session.query(Task).filter(Task.id == task_id).first()
 
 
 # DB接続のセッションを各エンドポイントの関数に渡す
 def get_db(request: Request):
+    # this property is injected on main.py
+    # the content of this property is the db session
     return request.state.db
 
 
@@ -68,6 +71,10 @@ def get_task_by_id(
     current_user=Depends(get_current_user),
 ):
     task = get_task(db, task_id)
+    if not task:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        )
     return task
 
 
@@ -113,7 +120,9 @@ async def update_task(
     task = get_task(db, task_id)
 
     if not task:
-        return {"error": "Project not found"}, 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        )
 
     task.title = task_created.title
     task.status = task_created.status
@@ -140,7 +149,9 @@ async def delete_task(
     task = get_task(db, task_id)
 
     if not task:
-        return {"error": "Project not found"}, 404
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"
+        )
 
     db.delete(task)
     db.commit()
