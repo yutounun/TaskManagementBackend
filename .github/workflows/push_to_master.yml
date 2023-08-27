@@ -17,7 +17,7 @@ jobs:
     # 複数の Python のバージョンでテストするために `strategy.matrix` を設定する
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.11]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python ${{ matrix.python-version }}
