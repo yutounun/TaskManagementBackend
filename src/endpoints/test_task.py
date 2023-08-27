@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from starlette import status
 from main import app
@@ -45,8 +44,8 @@ def created_task(headers):
     yield response.json()  # return response
 
     # delete create data after each test
-    task_id = response.json()["id"]
-    del_response = client.delete("/tasks/" + task_id, headers=headers)
+    # task_id = response.json()["id"]
+    # del_response = client.delete("/tasks/" + task_id, headers=headers)
     # assert del_response.status_code == status.HTTP_200_OK
 
 

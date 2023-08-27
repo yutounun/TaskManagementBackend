@@ -1,4 +1,3 @@
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from starlette import status
 from main import app

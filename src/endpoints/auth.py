@@ -11,7 +11,6 @@ from starlette.requests import Request
 from starlette import status
 from pydantic import BaseModel, Field
 from db import User
-from datetime import datetime
 from passlib.context import CryptContext
 from dotenv import load_dotenv
 

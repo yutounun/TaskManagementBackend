@@ -4,7 +4,6 @@ from fastapi import Depends, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session
 from starlette.requests import Request
-from pydantic import BaseModel, Field
 from db import Project
 from datetime import datetime
 from src.endpoints.auth import get_current_user
