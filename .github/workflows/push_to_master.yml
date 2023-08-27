@@ -1,4 +1,3 @@
-# ここに設定した名前がActions上に表示される
 name: pytest
 
 on:
@@ -12,9 +11,7 @@ on:
 jobs:
   pytest:
     name: Run tests with pytest
-    # 実行環境として `ubuntu-latest` という名前のものを選ぶ
     runs-on: ubuntu-latest
-    # 複数の Python のバージョンでテストするために `strategy.matrix` を設定する
     strategy:
       matrix:
         python-version: [3.11]
@@ -29,12 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      # - name: Lint with ruff
-      #   run: |
-      #     # stop the build if there are Python syntax errors or undefined names
-      #     ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
-      #     # default set of ruff rules with GitHub Annotations
-      #     ruff --format=github --target-version=py37 .
+      - name: Set PYTHONPATH
+        run: echo "PYTHONPATH=$PWD" >> $GITHUB_ENV
       - name: Test with pytest
         run: |
           pytest
