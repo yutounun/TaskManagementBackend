@@ -2,40 +2,23 @@ import uuid
 from fastapi import Depends, HTTPException, APIRouter
 from sqlalchemy.orm import Session
 from starlette.requests import Request
-from pydantic import BaseModel, Field
 from db import Task
 from datetime import datetime
 from starlette import status
 from src.endpoints.auth import get_current_user
+from src.types.task import (
+    TaskCreateRequest,
+    TaskGetResponse,
+    TaskEditRequest,
+    SimpleResponse,
+)
 
 # APIRouter creates path operations for item module
 router = APIRouter(
-    prefix="/task",
+    prefix="/tasks",
     tags=["Task"],
     responses={404: {"description": "Not found"}},
 )
-
-
-# Pydanticを用いたAPIに渡されるデータの定義 ValidationやDocumentationの機能が追加される
-# Class definition using BaseModel make models on swagger
-class TaskCreate(BaseModel):
-    title: str = Field(..., example="Test Task")
-    status: str = Field(..., example="pending")
-    man_hour_min: int = Field(..., example=60)
-    to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
-    from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
-    priority: int = Field(..., example=1)
-    project_key: str = Field(..., example="32ed23f32f2311")
-    user_key: str = Field(..., example="32ed23f32f2311")
-
-
-class TaskEdit(BaseModel):
-    title: str = Field(..., example="Test Task")
-    status: str = Field(..., example="pending")
-    man_hour_min: int = Field(..., example=60)
-    to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
-    from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
-    priority: int = Field(..., example=1)
 
 
 # utility func to get task by task_id
@@ -51,7 +34,7 @@ def get_db(request: Request):
 
 
 # taskの全取得
-@router.get("/")
+@router.get("/", response_model=list[TaskGetResponse])
 def get_tasks(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -64,7 +47,7 @@ def get_tasks(
 
 
 # 単一のtaskを取得
-@router.get("/{task_id}")
+@router.get("/{task_id}", response_model=TaskGetResponse)
 def get_task_by_id(
     task_id: str,
     db: Session = Depends(get_db),
@@ -79,9 +62,9 @@ def get_task_by_id(
 
 
 # taskを登録
-@router.post("/")
+@router.post("/", response_model=TaskGetResponse)
 async def create_task(
-    task_created: TaskCreate,
+    task_created: TaskCreateRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
@@ -108,10 +91,10 @@ async def create_task(
 
 
 # taskを更新
-@router.put("/{task_id}")
+@router.put("/{task_id}", response_model=TaskGetResponse)
 async def update_task(
     task_id: str,
-    task_created: TaskEdit,
+    task_created: TaskEditRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
@@ -136,11 +119,12 @@ async def update_task(
     db.commit()
     # return task that is committed already
     task = get_task(db, task_id)
+    print('task', task)
     return task
 
 
 # taskを削除
-@router.delete("/{task_id}")
+@router.delete("/{task_id}", response_model=SimpleResponse)
 async def delete_task(
     task_id: str,
     db: Session = Depends(get_db),

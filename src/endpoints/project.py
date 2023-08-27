@@ -10,31 +10,19 @@ from datetime import datetime
 from src.endpoints.auth import get_current_user
 from sqlalchemy.orm import joinedload
 from typing import Annotated
+from src.types.project import (
+    ProjectCreateRequest,
+    ProjectEditRequest,
+    ProjectGetResponse,
+    SimpleResponse,
+)
 
 # APIRouter creates path operations for item module
 router = APIRouter(
-    prefix="/project",
+    prefix="/projects",
     tags=["Project"],
     responses={404: {"description": "Not found"}},
 )
-
-
-# Pydanticを用いたAPIに渡されるデータの定義 ValidationやDocumentationの機能が追加される
-class ProjectCreate(BaseModel):
-    title: str = Field(..., example="Test project")
-    status: str = Field(..., example="pending")
-    total_man_hour_min: int = Field(..., example=60)
-    to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
-    from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
-    user_key: str = Field(..., example="32ed23f32f2311")
-
-
-class ProjectEdit(BaseModel):
-    title: str = Field(..., example="Test project")
-    status: str = Field(..., example="pending")
-    total_man_hour_min: int = Field(..., example=60)
-    to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
-    from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
 
 
 # 単一のprojectを取得するためのユーティリティ
@@ -53,7 +41,7 @@ def get_db(request: Request):
 
 
 # projectの全取得
-@router.get("/")
+@router.get("/", response_model=list[ProjectGetResponse])
 def get_projects(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -63,7 +51,7 @@ def get_projects(
 
 
 # 単一のprojectを取得
-@router.get("/{project_id}")
+@router.get("/{project_id}", response_model=ProjectGetResponse)
 def get_project_by_id(
     project_id: str,
     db: Session = Depends(get_db),
@@ -77,9 +65,9 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
 # projectを登録
-@router.post("/")
+@router.post("/", response_model=ProjectGetResponse)
 async def create_project(
-    project_created: ProjectCreate,
+    project_created: ProjectCreateRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
@@ -104,10 +92,10 @@ async def create_project(
 
 
 # projectを更新
-@router.put("/{project_id}")
+@router.put("/{project_id}", response_model=ProjectGetResponse)
 async def update_project(
     project_id: str,
-    project_created: ProjectEdit,
+    project_created: ProjectEditRequest,
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
@@ -135,7 +123,7 @@ async def update_project(
 
 
 # projectを削除
-@router.delete("/{project_id}")
+@router.delete("/{project_id}", response_model=SimpleResponse)
 async def delete_project(
     project_id: str,
     db: Session = Depends(get_db),
