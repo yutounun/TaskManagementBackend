@@ -12,6 +12,10 @@ jobs:
   pytest:
     name: Run tests with pytest
     runs-on: ubuntu-latest
+    env:
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ALGORITHM: ${{ secrets.ALGORITHM }}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
     strategy:
       matrix:
         python-version: [3.11]
