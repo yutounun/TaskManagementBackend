@@ -87,7 +87,7 @@ async def create_project(
 
     db.add(project)
     db.commit()
-    project = get_project(db, project.id)
+    # project = get_project(db, project.id)
     return project
 
 
@@ -118,7 +118,7 @@ async def update_project(
 
     db.commit()
     # return project that is committed already
-    project = get_project(db, project_id)
+    # project = get_project(db, project_id)
     return project
 
 
@@ -138,3 +138,4 @@ async def delete_project(
 
     db.delete(project)
     db.commit()
+    return SimpleResponse(status="OK")

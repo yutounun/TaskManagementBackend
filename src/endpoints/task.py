@@ -113,13 +113,15 @@ async def update_task(
     task.from_date = task_created.from_date
     task.to_date = task_created.to_date
     task.priority = task_created.priority
+    task.project_key = task_created.project_key
+    task.user_key = task_created.user_key
 
     task.updated_at = now
 
     db.commit()
     # return task that is committed already
     task = get_task(db, task_id)
-    print('task', task)
+    print("task", task)
     return task
 
 
@@ -139,3 +141,4 @@ async def delete_task(
 
     db.delete(task)
     db.commit()
+    return {"status": "OK"}
