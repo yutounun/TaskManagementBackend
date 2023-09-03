@@ -2,12 +2,11 @@ import uuid
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException
 from starlette import status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from starlette.requests import Request
 from db import Project
 from datetime import datetime
 from src.endpoints.auth import get_current_user
-from sqlalchemy.orm import joinedload
 from typing import Annotated
 from src.types.project import (
     ProjectCreateRequest,
