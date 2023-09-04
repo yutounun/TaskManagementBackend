@@ -11,7 +11,11 @@ app = FastAPI()
 # DB接続用のセッションクラス インスタンスが作成されると接続する
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-origins = ["http://localhost:8000"]
+origins = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "https://task-management-front-end-xf6w.vercel.app",
+]
 
 app.add_middleware(
     CORSMiddleware,

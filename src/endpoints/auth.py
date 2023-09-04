@@ -35,6 +35,11 @@ bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_bearer = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+
 class CreateUserRequest(BaseModel):
     username: str
     email: str
@@ -68,7 +73,7 @@ def get_db(request: Request):
 
 @router.post("/login", response_model=Token)
 async def login(
-    request: Annotated[OAuth2PasswordRequestForm, Depends()],
+    request: LoginRequest,
     db: Session = Depends(get_db),
 ):
     # get current user and make sure entered password
