@@ -26,16 +26,17 @@ Base = declarative_base()
 class Task(Base):
     __tablename__ = "Task"
     id = Column(String(36), primary_key=True, index=True)
-    title = Column(String(200))
-    status = Column(String(10))
+    title = Column(String(100))
+    status = Column(String(20))
+    type = Column(String(20))
     man_hour_min = Column(Integer)
     to_date = Column(DateTime, default=datetime.now(), nullable=False)
     from_date = Column(DateTime, default=datetime.now(), nullable=False)
     priority = Column(Integer)
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=datetime.now(), nullable=False)
-    project_key = Column(String(), ForeignKey("Project.id"))
-    user_key = Column(String(), ForeignKey("User.id"))
+    project_id = Column(String(), ForeignKey("Project.id"))
+    user_id = Column(String(), ForeignKey("User.id"))
 
     # relationship
     project = relationship("Project", back_populates="tasks")
@@ -53,7 +54,7 @@ class Project(Base):
     from_date = Column(DateTime, default=datetime.now(), nullable=False)
     created_at = Column(DateTime, default=datetime.now(), nullable=False)
     updated_at = Column(DateTime, default=datetime.now(), nullable=False)
-    user_key = Column(String(), ForeignKey("User.id"))
+    user_id = Column(String(), ForeignKey("User.id"))
 
     # relationship
     tasks = relationship("Task", back_populates="project")

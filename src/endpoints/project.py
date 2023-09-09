@@ -1,5 +1,5 @@
 import uuid
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 from fastapi import Depends, HTTPException
 from starlette import status
 from sqlalchemy.orm import Session, joinedload
@@ -41,10 +41,19 @@ def get_db(request: Request):
 # projectの全取得
 @router.get("/", response_model=list[ProjectGetResponse])
 def get_projects(
+    title: str = Query(None, title="title"),
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    projects = db.query(Project).options(joinedload(Project.tasks)).all()
+    if title:
+        projects = (
+            db.query(Project)
+            .filter(Project.title.startswith(title))
+            .options(joinedload(Project.tasks))
+            .all()
+        )
+    else:
+        projects = db.query(Project).options(joinedload(Project.tasks)).all()
     return projects
 
 
@@ -77,7 +86,7 @@ async def create_project(
         total_man_hour_min=project_created.total_man_hour_min,
         to_date=project_created.to_date,
         from_date=project_created.from_date,
-        user_key=project_created.user_key,
+        user_id=project_created.user_id,
     )
     project.id = str(uuid.uuid4())
     project.created_at = now

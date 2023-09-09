@@ -14,8 +14,8 @@ TASK_DATA = {
     "to_date": "2023-08-14T15:32:00Z",
     "from_date": "2023-08-14T15:32:00Z",
     "priority": 1,
-    "project_key": "test",
-    "user_key": "test",
+    "project_id": "test",
+    "user_id": "test",
 }
 EDIT_TASK_DATA = {
     "title": "update test",
@@ -24,8 +24,8 @@ EDIT_TASK_DATA = {
     "to_date": "2024-08-14T15:32:00Z",
     "from_date": "2024-08-14T15:32:00Z",
     "priority": 2,
-    "project_key": "update test",
-    "user_key": "update test",
+    "project_id": "update test",
+    "user_id": "update test",
 }
 
 

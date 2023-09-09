@@ -11,8 +11,8 @@ class TaskCreateRequest(BaseModel):
     to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
     from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
     priority: int = Field(..., example=1)
-    project_key: str = Field(..., example="32ed23f32f2311")
-    user_key: str = Field(..., example="32ed23f32f2311")
+    project_id: str = Field(..., example="32ed23f32f2311")
+    user_id: str = Field(..., example="32ed23f32f2311")
 
 
 class TaskGetResponse(BaseModel):

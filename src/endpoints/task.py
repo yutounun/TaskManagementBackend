@@ -41,7 +41,7 @@ def get_tasks(
 ):
     tasks = db.query(Task).all()
 
-    # project_keyでProjectを検索
+    # project_idでProjectを検索
 
     return tasks
 
@@ -75,10 +75,11 @@ async def create_task(
         status=task_created.status,
         man_hour_min=task_created.man_hour_min,
         to_date=task_created.to_date,
+        type=task_created.type,
         from_date=task_created.from_date,
         priority=task_created.priority,
-        project_key=task_created.project_key,
-        user_key=task_created.user_key,
+        project_id=task_created.project_id,
+        user_id=task_created.user_id,
     )
     task.id = str(uuid.uuid4())
     task.created_at = now
@@ -113,8 +114,9 @@ async def update_task(
     task.from_date = task_created.from_date
     task.to_date = task_created.to_date
     task.priority = task_created.priority
-    task.project_key = task_created.project_key
-    task.user_key = task_created.user_key
+    task.type = task_created.type
+    task.project_id = task_created.project_id
+    task.user_id = task_created.user_id
 
     task.updated_at = now
 

@@ -13,7 +13,7 @@ PROJECT_DATA = {
     "total_man_hour_min": 1,
     "to_date": "2023-08-14T15:32:00Z",
     "from_date": "2023-08-14T15:32:00Z",
-    "user_key": "test",
+    "user_id": "test",
 }
 EDIT_PROJECT_DATA = {
     "title": "update test",
@@ -21,7 +21,7 @@ EDIT_PROJECT_DATA = {
     "total_man_hour_min": 2,
     "to_date": "2024-08-14T15:32:00Z",
     "from_date": "2024-08-14T15:32:00Z",
-    "user_key": "test",
+    "user_id": "test",
 }
 
 
