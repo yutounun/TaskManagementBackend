@@ -13,7 +13,7 @@ TASK_DATA = {
     "man_hour_min": 1,
     "to_date": "2023-08-14T15:32:00Z",
     "from_date": "2023-08-14T15:32:00Z",
-    "priority": 1,
+    "priority": "urgent",
     "project_id": "test",
     "user_id": "test",
 }
@@ -23,7 +23,7 @@ EDIT_TASK_DATA = {
     "man_hour_min": 2,
     "to_date": "2024-08-14T15:32:00Z",
     "from_date": "2024-08-14T15:32:00Z",
-    "priority": 2,
+    "priority": "urgent",
     "project_id": "update test",
     "user_id": "update test",
 }

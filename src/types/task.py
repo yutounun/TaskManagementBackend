@@ -11,7 +11,7 @@ class TaskCreateRequest(BaseModel):
     man_hour_min: int = Field(None, example=60)
     to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
     from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
-    priority: int = Field(..., example=1)
+    priority: str = Field(..., example="critical")
     project_id: str = Field(..., example="32ed23f32f2311")
     user_id: str = Field(None, example="32ed23f32f2311")
 
@@ -24,7 +24,7 @@ class TaskGetResponse(BaseModel):
     man_hour_min: int = Field(None, example=60)
     to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
     from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
-    priority: int = Field(..., example=1)
+    priority: str = Field(..., example="critical")
     project_id: str = Field(..., example="32ed23f32f2311")
     user_id: str = Field(None, example="32ed23f32f2311")
 
@@ -39,7 +39,7 @@ class TaskEditRequest(BaseModel):
     man_hour_min: int = Field(..., example=60)
     to_date: datetime = Field(..., example="2023-08-15T15:32:00Z")
     from_date: datetime = Field(..., example="2023-08-14T15:32:00Z")
-    priority: int = Field(..., example=1)
+    priority: str = Field(..., example="critical")
     project_id: str = Field(..., example="32ed23f32f2311")
     user_id: str = Field(..., example="32ed23f32f2311")
 

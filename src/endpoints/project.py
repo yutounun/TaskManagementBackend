@@ -83,10 +83,8 @@ async def create_project(
     project = Project(
         title=project_created.title,
         status=project_created.status,
-        total_man_hour_min=project_created.total_man_hour_min,
         to_date=project_created.to_date,
         from_date=project_created.from_date,
-        user_id=project_created.user_id,
     )
     project.id = str(uuid.uuid4())
     project.created_at = now
@@ -117,7 +115,6 @@ async def update_project(
 
     project.title = project_created.title
     project.status = project_created.status
-    project.total_man_hour_min = project_created.total_man_hour_min
     project.from_date = project_created.from_date
     project.to_date = project_created.to_date
 
