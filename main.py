@@ -14,6 +14,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 origins = [
     "http://localhost:3000",
     "http://localhost:8000",
+    "https://neo-task-management.vercel.app",
     "https://task-management-front-end-xf6w.vercel.app",
 ]
 
