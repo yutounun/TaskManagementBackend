@@ -39,11 +39,10 @@ def get_tasks(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    tasks = db.query(Task).all()
+    tasks = db.query(Task)
 
     # project_idでProjectを検索
-
-    return tasks
+    return tasks.filter(Task.user_id == current_user.id).all()
 
 
 # 単一のtaskを取得
@@ -53,7 +52,7 @@ def get_task_by_id(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
 ):
-    task = get_task(db, task_id)
+    task = get_task(db, task_id).filter(Task.user_id == current_user.id)
     if not task:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Task not found"

@@ -21,7 +21,6 @@ class ProjectGetResponse(BaseModel):
     updated_at: datetime = Field(..., example="2023-08-14T15:32:00Z")
 
     tasks: list[TaskGetResponse] = Field(None, example=None)
-    users: list = Field(None, example=None)
 
 
 class ProjectEditRequest(BaseModel):
