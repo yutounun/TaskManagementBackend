@@ -12,23 +12,16 @@ Click [here!](https://taskmanagement-y09z.onrender.com/docs#)
 - **Python**: The core programming language used for this project.
 - **Pytest**: A robust testing framework for Python, ensuring the reliability of our code.
 - **SQLite**: A C-language library that implements a small, fast, self-contained, high-reliability, full-featured, SQL database engine.
+- **Docker:** A platform to develop, ship, and run applications inside containers.
 
 ## ✈️Getting Started
 
 ### Prerequisites
-Ensure you have Python installed on your machine. This project is developed using Python 3.7+.
-
-### Installation
-1. Clone the repository to your local machine.
-2. Navigate to the project directory.
-3. Install all the required dependencies using pip:
-   ```
-   pip install -r requirements.txt
-   ```
+Insntall Docker app on your local.
 
 ### Running the Application
 To start the application, use the following command:
 ```
-uvicorn main:app --reload
+docker-compose up --build
 ```
 This will start the FastAPI application with hot-reloading enabled.
