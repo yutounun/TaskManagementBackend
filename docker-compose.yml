@@ -1,0 +1,13 @@
+version: "3"
+
+services:
+  app:
+    container_name: FastAPI
+    build:
+      dockerfile: ./docker/Dockerfile # Use Docker file in docker directory
+    volumes:
+      - ./src:/var/www/html/src # Map the src directory to container
+      - ./main.py:/var/www/html/main.py # Map main.py to container
+    ports:
+      - "8000:8000"
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000

@@ -5,7 +5,6 @@ from routes.api import router as api_router
 from sqlalchemy.orm import sessionmaker
 from starlette.requests import Request
 from db import engine
-from mangum import Mangum
 
 app = FastAPI()
 
@@ -46,7 +45,3 @@ async def db_session_middleware(request: Request, call_next):
     # route handler may return a response
     request.state.db.close()
     return response
-
-
-# This file is main file on the top of every files
-handler = Mangum(app)
