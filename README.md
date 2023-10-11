@@ -7,7 +7,8 @@ Click [here!](https://p3xufwps3c.ap-northeast-1.awsapprunner.com/docs#)
 <img width="1436" alt="image" src="https://github.com/yutounun/TaskManagementAPI/assets/96335290/baae5eda-44aa-4b97-a1a0-815aafc88e2b">
 
 ## Architecture
-<img width="1074" alt="image" src="https://github.com/yutounun/TaskManagementBackend/assets/96335290/d0c56098-8a4f-457a-907c-55cbf8cf87a6">
+<img width="1066" alt="image" src="https://github.com/yutounun/TaskManagementBackend/assets/96335290/58df583c-324a-4d63-b91d-2a75d704b022">
+
 
 
 
