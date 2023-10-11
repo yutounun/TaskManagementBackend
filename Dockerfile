@@ -1,5 +1,5 @@
-FROM python:3.11
-WORKDIR /var/www/html
+FROM --platform=linux/x86_64 python:3.11
+WORKDIR /var/www/html 
 RUN pip install --upgrade pip
 # Copy only requirements txt before copying the rest to leverage cache
 COPY ../requirements.txt . 
