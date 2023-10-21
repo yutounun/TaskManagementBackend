@@ -4,10 +4,11 @@ Welcome to the TaskManagement repository. This project is designed to manage tas
 
 
 ## Architecture
-<img width="1080" alt="image" src="https://github.com/yutounun/TaskManagementBackend/assets/96335290/4db64e7c-b5bd-4b28-8f1b-e4182ad89843">
+<img width="899" alt="image" src="https://github.com/yutounun/TaskManagementBackend/assets/96335290/786ec167-8c30-4348-a9ac-529fd93cf565">
+
 
 ## 📝Swagger
-Click [here!](https://p3xufwps3c.ap-northeast-1.awsapprunner.com/docs#)
+Click [here!](https://cx7qmuq9mb.ap-northeast-1.awsapprunner.com/docs#)
 
 <img width="1436" alt="image" src="https://github.com/yutounun/TaskManagementAPI/assets/96335290/baae5eda-44aa-4b97-a1a0-815aafc88e2b">
 
