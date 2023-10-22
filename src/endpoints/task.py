@@ -34,7 +34,7 @@ def get_db(request: Request):
 
 
 # taskの全取得
-@router.get("/", response_model=list[TaskGetResponse])
+@router.get("", response_model=list[TaskGetResponse])
 def get_tasks(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -61,7 +61,7 @@ def get_task_by_id(
 
 
 # taskを登録
-@router.post("/", response_model=TaskGetResponse)
+@router.post("", response_model=TaskGetResponse)
 async def create_task(
     task_created: TaskCreateRequest,
     db: Session = Depends(get_db),

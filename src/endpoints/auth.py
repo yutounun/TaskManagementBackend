@@ -151,7 +151,7 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
 
 
 # userの全取得
-@router.get("/")
+@router.get("")
 def get_users(
     db: Session = Depends(get_db),
     current_user=Depends(get_current_user),
@@ -172,7 +172,7 @@ def get_user_by_id(
 
 
 # userを登録
-@router.post("/")
+@router.post("")
 async def create_user(user_created: CreateUserRequest, db: Session = Depends(get_db)):
     now = datetime.now()
 

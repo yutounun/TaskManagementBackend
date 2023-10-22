@@ -95,7 +95,7 @@ def get_projects(
 
 
 # Return only projects. Called on Project list page
-@router.get("/", response_model=list[ProjectGetResponse])
+@router.get("", response_model=list[ProjectGetResponse])
 def get_projects(
     title: str = Query(None, title="title"),
     db: Session = Depends(get_db),
@@ -155,7 +155,7 @@ user_dependency = Annotated[dict, Depends(get_current_user)]
 
 
 # projectを登録
-@router.post("/", response_model=ProjectGetResponse)
+@router.post("", response_model=ProjectGetResponse)
 async def create_project(
     project_created: ProjectCreateRequest,
     db: Session = Depends(get_db),
