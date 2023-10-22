@@ -32,14 +32,11 @@ on:
         description: 'Test scenario tags'
         required: false
         type: boolean
-      environment:
-        description: 'Environment to run tests against'
-        type: environment
-        required: true
 
 env:
   AWS_REGION: ap-northeast-1                   # set this to your preferred AWS region, e.g. us-west-1
   ECR_REPOSITORY: taskmanagement           # set this to your Amazon ECR repository name
+  ECR_RESISTORY: 544914028607.dkr.ecr.ap-northeast-1.amazonaws.com/taskmanagement
 
 permissions:
   contents: read
@@ -48,7 +45,10 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: production
+    
+    permissions:
+      id-token: write
+      contents: read
 
     steps:
     - name: Checkout
@@ -57,20 +57,17 @@ jobs:
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
+        role-to-assume: 'arn:aws:iam::544914028607:role/GithubActionsRole'
 
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
-    - name: List directory files
-      run: ls -la
 
     - name: Build, tag, and push image to Amazon ECR
       id: build-image
       env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REGISTRY: ${{ env.ECR_RESISTORY }}
         ECR_REPOSITORY: ${{ env.ECR_REPOSITORY }}
         IMAGE_TAG: latest
       run: |
@@ -79,10 +76,14 @@ jobs:
         # be deployed to ECS.
         
         docker build -t $ECR_REPOSITORY .
-        docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG 
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY:$IMAGE_TAG 
+
+        echo "Pushing image to $ECR_REGISTRY:$IMAGE_TAG..."
+        docker push $ECR_REGISTRY:$IMAGE_TAG
+        echo "Pushing image to $ECR_REGISTRY:$IMAGE_TAG..."
+
         echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
 
    
-        container-name: ${{ env.CONTAINER_NAME }}
-        image: ${{ steps.build-image.outputs.image }}
+        # container-name: ${{ env.CONTAINER_NAME }}
+        # image: ${{ steps.build-image.outputs.image }}
