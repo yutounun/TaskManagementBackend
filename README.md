@@ -8,7 +8,7 @@ Welcome to the TaskManagement repository. This project is designed to manage tas
 
 
 ## 📝Swagger
-Click [here!](https://cx7qmuq9mb.ap-northeast-1.awsapprunner.com/docs#)
+Click [here](https://cx7qmuq9mb.ap-northeast-1.awsapprunner.com/docs#)
 
 <img width="1436" alt="image" src="https://github.com/yutounun/TaskManagementAPI/assets/96335290/baae5eda-44aa-4b97-a1a0-815aafc88e2b">
 
