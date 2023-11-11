@@ -78,7 +78,7 @@ async def create_task(
         from_date=task_created.from_date,
         priority=task_created.priority,
         project_id=task_created.project_id,
-        user_id=task_created.user_id,
+        user_id=current_user["id"],
     )
     task.id = str(uuid.uuid4())
     task.created_at = now
