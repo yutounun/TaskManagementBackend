@@ -115,7 +115,7 @@ async def update_task(
     task.priority = task_created.priority
     task.type = task_created.type
     task.project_id = task_created.project_id
-    task.user_id = task_created.user_id
+    task.user_id = current_user["id"]
 
     task.updated_at = now
 
